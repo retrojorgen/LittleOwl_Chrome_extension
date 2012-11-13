@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Getting Started Extension's Popup</title>
+    <style>
+      body {
+        min-width:400px;
+        overflow-x:hidden;
+        margin: 0px;
+        padding: 0px;
+        background-color: black;
+        font-family: arial;
+        font-size: 12px;
+      }
+      #floatingMenu {
+        clear: both;
+        position: fixed;
+        width: 100%;
+        height: 40px;
+        background-color: #d7e5f5;
+        top: 0px;
+      }
+      #floatingMenu > div {
+        margin: auto;
+        text-align: center;
+      }
+
+      div.share {
+        width: 300px;
+        padding-top: 2px;
+        margin-bottom: 10px;
+        padding-left: 5px;
+      }
+      div.sharedcontent {
+        cursor: pointer;
+        width:300px;
+        vertical-align: middle;
+        padding: 2px;
+      }
+      .sharedcontent img {
+        margin-right: 5px;
+        vertical-align: middle;
+        float: left;
+
+      }
+      span.author {
+        font-weight: bold;
+      }      
+      span.date {
+        font-weight: normal;
+        padding: 2px;
+      }
+
+      span.user {
+        font-weight: bold;
+        font-size: 16px;
+        padding: 2px;
+      }      
+      div.message {
+        font-weight: bold;
+        padding: 2px;
+      }            
+      div.url {
+        width: 275px;
+        margin-bottom: 10px;
+      }
+      div.separatorLine {
+        background: url("img/separator_line.png");
+        width: 300px;
+        height: 5px;
+      }
+      button.share {
+        padding: 10px;
+      }
+      button.unfollow {
+        padding: 10px;
+      }
+      button.follow {
+        padding: 10px;
+      }
+      .follower {
+        float: left;
+        width: 500px;
+        padding-left: 5px;
+        border-bottom: 1px solid #a1afbf;
+      }
+      .follow {
+        float: right;
+      }
+      .black_overlay{
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        z-index:1001;
+        -moz-opacity: 0.8;
+        opacity:.80;
+        filter: alpha(opacity=80);
+      }
+      .white_content {
+        position: absolute;
+        top: 125px;
+        left: 150px;
+        color: white;
+        width: 50%;
+        height: 50%;
+        padding: 16px;
+        z-index:1002;
+        overflow: auto;
+      }                                              
+    </style>
+    
+    <!-- JavaScript and HTML must be in separate files for security. -->
+    <link rel="stylesheet" href="css/jquery-ui-1.9.1.custom.css" />
+    <script src="js/jquery-1.8.2.js"></script>
+    <script src="js/jquery-ui-1.9.1.custom.js"></script>
+    <script src="jquery_onready.js"></script> 
+  </head>
+  <body>
+    <div id="tabs">
+      <ul>
+        <li><a href="#tabs-1">Feed</a></li>
+        <li><a href="#tabs-2">Followers</a></li>
+        <li><a href="#tabs-3">Share</a></li>
+      </ul>   
+      <div id="tabs-1"></div>
+      <div id="tabs-2"></div>
+      <div id="tabs-3"></div>
+    </div>
+  
+  <script src="jquery.js"></script>   
+  </body>
+</html>

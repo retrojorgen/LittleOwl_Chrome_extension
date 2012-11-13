@@ -1,0 +1,22 @@
+{
+  "name": "SirFart",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Lets you share urls and follow other users shared urls",
+  "permissions": [
+    "history",
+    "*://*.retrojorgen.com/",
+    "http://www.retrojorgen.com/",
+    "*://*.jquery.com/",
+    "cookies",
+    "tabs"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "update_url": "http://www.retrojorgen.com/updates.xml",
+  "browser_action": {
+    "default_icon": "icon_offline.png",
+    "default_popup": "popup.html"
+  }
+}
