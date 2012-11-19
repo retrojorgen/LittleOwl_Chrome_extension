@@ -3,7 +3,7 @@ var url = "", title = "", host = "", time = "",
 tabs2 = function() {
 	var tab2Content = $("#ftabs-1");
 	tab2Content.html("<img src='../img/loading.gif' />");
-	var getFollowers = $.getJSON('http://www.retrojorgen.com/showfollowersJSON.php', function(data) {
+	var getFollowers = $.getJSON('http://www.retrojorgen.com/api.php?type=showfollowers', function(data) {
 		tab2Content.empty();
      	$.each(data, function(i, field){
         		tab2Content.append("<div class='follower'>@" + field.twitter_screen_name + "<input type='hidden' class='followerid' name='id' value='" + field.user_id +"'><input type='button' class='cupid-blue follow' value='unFollow'></div>");
@@ -56,8 +56,8 @@ $(".cupid-blue.follow").live({
 		$(this).empty().html("<img src='../img/loading.gif' />");
 		$.ajax({
 			type: "GET",	
-	  		url: 'http://www.retrojorgen.com/followerLogToDatabase.php',
-	  		data: {follower: followerid, follow: followerstring},
+	  		url: 'http://www.retrojorgen.com/api.php',
+	  		data: {type: "followertodatabase", follower: followerid, follow: followerstring},
 	  		dataType: "json",
 	  		success: function(data) {
 				console.log(data);
@@ -68,21 +68,14 @@ $(".cupid-blue.follow").live({
 	}
 });
 
-$(".authenticate").live({
-	click: function() {
-		chrome.tabs.create({url: 'http://www.retrojorgen.com/auth_redirect.php'});
-	}
-});
-
-
 $("#sharebutton").live({
 	click: function() {
 		$("#shareButtonContent").html("<img src='../img/loading.gif' />");
 		chrome.tabs.getSelected(null, function(tab) {
 			$.ajax({
 			type: "POST",	
-		  	url: 'http://www.retrojorgen.com/shareLogToDatabase.php',
-		  	data: {url: tab.url, title: tab.title, message: $("#sharetext").val()},
+		  	url: 'http://www.retrojorgen.com/api.php',
+		  	data: {type: "sharelogtodatabase", url: tab.url, title: tab.title, message: $("#sharetext").val()},
 		  	success: function(data) {
 		  		console.log(data);
 		    	$("#shareButtonContent").html("<div>" + data.new_status + "</div>");
@@ -117,6 +110,6 @@ $(".sharedcontent").live({
 });
 $(".splashContent").live({
 	click: function() {
-		chrome.tabs.create({url: 'http://www.retrojorgen.com/auth_redirect.php'});	
+		chrome.tabs.create({url: 'http://www.retrojorgen.com/api.php?type=authenticationredirect'});	
 	}
 });

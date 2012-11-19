@@ -37,7 +37,7 @@ setLatestValueFromPopup = function () {
     latestValue = yourShare[0].id;
 },
 setYourShareLogFromXMLHttpRequest = function (callback) {
-    doXMLhttpRequest("GET","http://www.retrojorgen.com/showshareJSON.php", function(output) {
+    doXMLhttpRequest("GET","http://www.retrojorgen.com/api.php?type=showshare", function(output) {
         if(output) {
             yourShare = JSON.parse(output);
             callback(true);
@@ -46,7 +46,7 @@ setYourShareLogFromXMLHttpRequest = function (callback) {
     });
 },
 setAllShareLogFromXMLHttpRequest = function (callback) {
-    doXMLhttpRequest("GET","http://www.retrojorgen.com/showshareJSON.php?status=all", function(output) {
+    doXMLhttpRequest("GET","http://www.retrojorgen.com/api.php?type=showshare&status=all", function(output) {
         allShare = JSON.parse(output);
         callback();    
     });
