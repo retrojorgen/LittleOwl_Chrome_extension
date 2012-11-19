@@ -9,8 +9,8 @@ shareInterval = function () {
                     latestValue = yourShare[0].id;
             }
             setAllShareLogFromXMLHttpRequest(function(output) {
-                chrome.browserAction.setIcon({path: 'icon_online.png'});
-                UpdateBadgeStatus();
+                chrome.browserAction.setIcon({path: 'img/icon_online.png'});
+                updateBadgeStatus();
             });
         });
     }, 5000);
@@ -51,7 +51,7 @@ setAllShareLogFromXMLHttpRequest = function (callback) {
         callback();    
     });
 },
-SetBadgeStatus = function () {
+updateBadgeStatus = function () {
     chrome.browserAction.setBadgeBackgroundColor({color:[59, 154, 243, 230]});
     var differenceBetweenLatestSeenShareAndNewestShare = yourShare[0].id - latestValue;
     if(differenceBetweenLatestSeenShareAndNewestShare > 0) {
