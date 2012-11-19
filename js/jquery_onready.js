@@ -1,40 +1,8 @@
-var listContent = function () {
-		var itemcontent = $("#stabs-1");
+var listContent = function (tabName, tabContent) {
+		var itemcontent = $(tabName);
 		chrome.extension.getBackgroundPage().setLatestValueFromPopup();
 		itemcontent.children('.share').remove(); //remove all shares
-		$.each(chrome.extension.getBackgroundPage().yourShare, function(i, field){
-			itemcontent.append(
-				"<div class='share'>" +
-					"<span class='user'>@" +
-						field.twitter_screen_name + 
-					"</span>" +
-					"<span class='date'>" +
-						compareDateToNow(dateFromMySQLTimestamp(field.timestamp)) +
-					"</span>" +
-					"<div class='message'>" +
-						field.message + 
-					"</div>" +				
-					"<div class='sharedcontent'>" + 
-						"<img src='http://www.google.com/s2/favicons?domain=" + 
-						field.host + 
-						"'/>" + 
-						"<div class='url'>" +
-							field.title + 
-							" - " + 
-							field.host +
-						"</div>" + 	
-						"<input type='hidden' class='openUrl' value='" + 
-						field.url +
-						"'/>" +	
-					"</div>" +
-				"</div>");
-		});
-
-}
-var listAllContent = function () {
-		var itemcontent = $("#stabs-2");
-		itemcontent.children('.share').remove(); //remove all shares
-		$.each(chrome.extension.getBackgroundPage().allShare, function(i, field){
+		$.each(tabContent, function(i, field){
 			itemcontent.append(
 				"<div class='share'>" +
 					"<span class='user'>@" +
@@ -106,7 +74,7 @@ $(document).ready(function() {
 	$("#ftabs").tabs();
 	$("#sharebutton").button();
 	if (chrome.extension.getBackgroundPage().yourShare) {
-		listContent();
+		listContent("#stabs-1",chrome.extension.getBackgroundPage().yourShare);
 	}	
 	else {
 		loginPrompt();

@@ -1,0 +1,142 @@
+     body {
+        min-width:350px;
+        min-height: 300px;
+        overflow-x:hidden;
+        margin: 0px;
+        padding: 0px;
+        background: black url(../img/mainBodyBackground.jpg) repeat;
+        font-family: arial;
+        font-size: 12px;
+      }
+      div.share {
+        padding: 10px;
+        border-bottom: 1px solid #CFCFCF;        
+      }
+      div.sharedcontent {
+        cursor: pointer;
+        vertical-align: middle;
+        padding: 2px;
+      }
+      .sharedcontent img {
+        margin-right: 5px;
+        vertical-align: middle;
+        float: left;
+
+      }
+      span.author {
+        font-weight: bold;
+      }      
+      span.date {
+        font-weight: normal;
+        padding: 2px;
+        float: right;
+        color: #929292;
+      }
+
+      span.user {
+        font-weight: bold;
+        padding: 2px;
+        color: #0077A5;
+      }      
+      div.message {
+        font-weight: bold;
+        padding: 2px;
+      }            
+      div.url {
+      }
+      button.share {
+        padding: 10px;
+      }
+      button.unfollow {
+        padding: 10px;
+      }
+      button.follow {
+        padding: 10px;
+      }
+      .follower {
+        padding: 10px;
+        border-bottom: 1px solid #a1afbf;
+      }
+      .follow {
+        float: right;
+      }
+      .splashContent {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        color: black;
+        width: 350px;
+        height: 300px;
+        z-index:1002;
+
+      }
+      .ui-corner-all {
+        -khtml-border-top-right-radius: 0px;
+        border-top-right-radius: 0px;
+        -khtml-border-top-left-radius: 0px;
+        border-top-left-radius: 0px;
+        -khtml-border-bottom-left-radius: 0px;
+        border-bottom-left-radius: 0px; 
+        -khtml-border-bottom-right-radius: 0px;
+        border-bottom-right-radius: 0px; 
+      }
+      .subtab .ui-corner-all {
+        -khtml-border-top-right-radius: 6px;
+        border-top-right-radius: 6px;
+        -khtml-border-top-left-radius: 6px;
+        border-top-left-radius: 6px;
+        -khtml-border-bottom-left-radius: 0px;
+        border-bottom-left-radius: 0px; 
+        -khtml-border-bottom-right-radius: 0px;
+        border-bottom-right-radius: 0px; 
+      }
+      .ui-tabs .ui-tabs-panel {
+        background-color: white;
+      }         
+      .ui-widget-header {
+        background: #444 url(../img/topMenuBackground.png) repeat-x;
+        border: 0px solid #333;
+      }
+      .subtab .ui-widget-header {
+        background: #444 url(../img/subMenuBackground.png) repeat-x;
+        border: 0px solid #333;
+      }      
+      .ui-tabs .ui-tabs-panel {
+        padding: 0px;  
+      }
+      .ui-tabs .ui-tabs-nav {
+        box-shadow: 0px 2px 10px #888;
+        outline: none;
+      }
+      .ui-tabs {
+        padding: 0em;
+        margin: 0;
+      }
+      .ui-widget-content {
+        background: black url(../img/mainBodyBackground.jpg) repeat;
+        border: 0px;
+      }
+      .ui-widget-content{
+        color: black;
+      }
+      .tabWrapper {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        width: 330px;
+        background-color: white;
+        -khtml-border-top-right-radius: 6px;
+        border-top-right-radius: 6px;
+        -khtml-border-top-left-radius: 6px;
+        border-top-left-radius: 6px;
+        -khtml-border-bottom-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+        -khtml-border-bottom-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        box-shadow: 1px 1px 1px rgba(204, 204, 204, 1);
+        -webkit-box-shadow: 0 0 5px rgba(194, 194, 194, 1);
+        -moz-box-shadow: 0 0 3px rgba(0, 0, 255, 1);
+        border: 1px solid rgba(187, 187, 187, 0.8);
+        display: block;
+        margin-left: auto;
+        margin-right: auto;             
+      }

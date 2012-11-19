@@ -29,7 +29,7 @@ tabs3 = function() {
 $("#tabs").bind("tabsselect", function(e, tab) {
 		console.log(tab.panel.id);
         if(tab.panel.id === "tabs-1") {
-        	listContent();
+        	listContent("#stabs-1",chrome.extension.getBackgroundPage().yourShare);
         }
         if(tab.panel.id === "tabs-2") {
         	tabs2();
@@ -38,10 +38,10 @@ $("#tabs").bind("tabsselect", function(e, tab) {
         	tabs3();
         }
         if(tab.panel.id === "stabs-1") {
-        	listContent();
+        	listContent("#stabs-1",chrome.extension.getBackgroundPage().yourShare);
         }
         if(tab.panel.id === "stabs-2") {
-        	listAllContent();
+        	listContent("#stabs-2",chrome.extension.getBackgroundPage().allShare);
         }
         if(tab.panel.id === "tabs-3") {
         	tabs3();
