@@ -1,34 +1,63 @@
 var listContent = function () {
-		var item1content = $("#tabs-1");
-		item1content.empty();
-		$.each(chrome.extension.getBackgroundPage().share, function(i, field){
-			var shareClass = "share";
-			if(field.id > chrome.extension.getBackgroundPage().latestValue) {
-				var shareClass = "share new";
-			}
-			item1content.append(
+		var itemcontent = $("#stabs-1");
+		chrome.extension.getBackgroundPage().setLatestValueFromPopup();
+		itemcontent.children('.share').remove(); //remove all shares
+		$.each(chrome.extension.getBackgroundPage().yourShare, function(i, field){
+			itemcontent.append(
 				"<div class='share'>" +
 					"<span class='user'>@" +
 						field.twitter_screen_name + 
 					"</span>" +
-					"<span class='date'> - " +
+					"<span class='date'>" +
 						compareDateToNow(dateFromMySQLTimestamp(field.timestamp)) +
 					"</span>" +
 					"<div class='message'>" +
 						field.message + 
 					"</div>" +				
-					"<div class='sharedcontent'><img src='http://www.google.com/s2/favicons?domain=" + 
+					"<div class='sharedcontent'>" + 
+						"<img src='http://www.google.com/s2/favicons?domain=" + 
 						field.host + 
-					"'/>" + 
-					"<div class='url'>" +
-						field.title + 
-						" - " + 
-						field.host +
-						"<input type='hidden' class='openurl' value='" + 
-							field.url +
+						"'/>" + 
+						"<div class='url'>" +
+							field.title + 
+							" - " + 
+							field.host +
+						"</div>" + 	
+						"<input type='hidden' class='openUrl' value='" + 
+						field.url +
 						"'/>" +	
 					"</div>" +
-					"<div class='separatorLine'>" +
+				"</div>");
+		});
+
+}
+var listAllContent = function () {
+		var itemcontent = $("#stabs-2");
+		itemcontent.children('.share').remove(); //remove all shares
+		$.each(chrome.extension.getBackgroundPage().allShare, function(i, field){
+			itemcontent.append(
+				"<div class='share'>" +
+					"<span class='user'>@" +
+						field.twitter_screen_name + 
+					"</span>" +
+					"<span class='date'>" +
+						compareDateToNow(dateFromMySQLTimestamp(field.timestamp)) +
+					"</span>" +
+					"<div class='message'>" +
+						field.message + 
+					"</div>" +				
+					"<div class='sharedcontent'>" + 
+						"<img src='http://www.google.com/s2/favicons?domain=" + 
+						field.host + 
+						"'/>" + 
+						"<div class='url'>" +
+							field.title + 
+							" - " + 
+							field.host +
+						"</div>" + 	
+						"<input type='hidden' class='openUrl' value='" + 
+						field.url +
+						"'/>" +	
 					"</div>" +
 				"</div>");
 		});
@@ -67,15 +96,19 @@ compareDateToNow = function(dateObject) {
 	return false;
 },
 loginPrompt = function () {
-			$("body").append("<div id='light' class='white_content'></div><div id='fade' class='black_overlay'></div>");
-			$(".white_content").append("Unfortunately, you need to log in.<br /><br /><img src='sign_in_with_twitter.png' class='authenticate'>");	
+			$("body").append("<div id='light' class='splashContent'></div><div id='fade' class='black_overlay'></div>");
+			$(".splashContent").append("<img src='img/sirfart_splashscreen.png'>");	
 }
 
 $(document).ready(function() {
 	$("#tabs").tabs();
-	$("#button").tabs();
-	chrome.extension.getBackgroundPage().getCookieStatus(function (logged) {
-		if (logged) listContent();
-		else loginPrompt();
-	});	
+	$("#stabs").tabs();
+	$("#ftabs").tabs();
+	$("#sharebutton").button();
+	if (chrome.extension.getBackgroundPage().yourShare) {
+		listContent();
+	}	
+	else {
+		loginPrompt();
+	}
 });

@@ -1,15 +1,20 @@
 var iconstatus = false, 
-share = false, 
+yourShare = false,
+allShare = false, 
 latestValue = 0,
-shareInterval = setInterval(function() { 
-    setShareLogFromXMLHttpRequest();
-    if(latestValue === 0) {
-        latestValue = share[0].id;
-    }
-    SetBadgeStatus();
-    console.log(latestValue);
-    console.log(share[0].id);
-}, 5000),
+shareInterval = function () {
+    setInterval(function() { 
+        setYourShareLogFromXMLHttpRequest(function(output) {
+            if(latestValue === 0) {
+                    latestValue = yourShare[0].id;
+            }
+            setAllShareLogFromXMLHttpRequest(function(output) {
+                chrome.browserAction.setIcon({path: 'icon_online.png'});
+                UpdateBadgeStatus();
+            });
+        });
+    }, 5000);
+},
 doXMLhttpRequest = function (type,url,callback) {
    var req = new XMLHttpRequest();
     req.open(
@@ -20,6 +25,8 @@ doXMLhttpRequest = function (type,url,callback) {
     req.onreadystatechange = function() {
         if (req.readyState == 4 && req.status == 200) {
             callback(req.responseText);
+        } else {
+            callback(false);
         }
     }
 },
@@ -27,35 +34,32 @@ getLatestValue = function() {
     return latestValue;
 }, 
 setLatestValueFromPopup = function () {
-    latestValue = share[0].id;
+    latestValue = yourShare[0].id;
 },
-setShareLogFromXMLHttpRequest = function () {
-    //SetBadgeStatus();
+setYourShareLogFromXMLHttpRequest = function (callback) {
     doXMLhttpRequest("GET","http://www.retrojorgen.com/showshareJSON.php", function(output) {
-        share = JSON.parse(output);    
+        if(output) {
+            yourShare = JSON.parse(output);
+            callback(true);
+        }    
+            
+    });
+},
+setAllShareLogFromXMLHttpRequest = function (callback) {
+    doXMLhttpRequest("GET","http://www.retrojorgen.com/showshareJSON.php?status=all", function(output) {
+        allShare = JSON.parse(output);
+        callback();    
     });
 },
 SetBadgeStatus = function () {
     chrome.browserAction.setBadgeBackgroundColor({color:[59, 154, 243, 230]});
-    var differenceBetweenLatestSeenShareAndNewestShare = share[0].id - latestValue;
-    if(differenceBetweenLatestSeenShareAndNewestShare > 0) chrome.browserAction.setBadgeText({text: "" + differenceBetweenLatestSeenShareAndNewestShare});
-    else chrome.browserAction.setBadgeText({text:""});
-},
-getCookieStatus = function (callback) {
-    chrome.cookies.get({url:"http://www.retrojorgen.com", name:"twitterauth"}, function(cookie){
-        if(cookie) {callback(true); }
-        else { callback(false); }
-    });
+    var differenceBetweenLatestSeenShareAndNewestShare = yourShare[0].id - latestValue;
+    if(differenceBetweenLatestSeenShareAndNewestShare > 0) {
+        chrome.browserAction.setBadgeText({text:"" + differenceBetweenLatestSeenShareAndNewestShare});
+    }
+    else {
+        chrome.browserAction.setBadgeText({text:""});
+    }    
 }
-setShareLogFromXMLHttpRequest();
-getCookieStatus(function (status) {
-    if(status) chrome.browserAction.setIcon({path: 'icon_online.png'});
-});
 
-// listen if a cookie is set
-chrome.cookies.onChanged.addListener(function(info) {
-  if(info.cookie.domain === "www.retrojorgen.com" && info.cookie.name === "twitterauth") {
-    iconstatus = true;
-    chrome.browserAction.setIcon({path: 'icon_online.png'});
-  }
-});
+shareInterval();
