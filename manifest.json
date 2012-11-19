@@ -12,7 +12,7 @@
     "tabs"
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["js/background.js"]
   },
   "update_url": "http://www.retrojorgen.com/updates.xml",
   "browser_action": {
