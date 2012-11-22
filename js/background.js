@@ -18,7 +18,7 @@ shareInterval = function () {
                         setUserCredentials(function(output, credentials) {
                             if(output) {
                                 userCredentials = credentials;
-                                setFollowers(function(followerArray) {
+                                getFollowers(function(followerArray) {
                                     if(followerArray) {
                                         yourFollowers = followerArray;
                                         yourFollowers[userCredentials.user_id] = userCredentials.user_id;
@@ -27,24 +27,33 @@ shareInterval = function () {
                                         console.log("Service not available");
                                     }
                                 });
+                            } else {
+                                console.log("failed to get user credentials");
                             } 
                         });                        
                         updateBadgeStatus();                        
+                    } else {
+                        console.log("failed to get all share");
                     }
                 });
+            } else {
+                console.log("failed to get your share");
             }
         });
     }, 5000);
 },
-setFollowers = function(callback) {
+getFollowers = function(callback) {
     getFollowersFromXMLHttpRequest(function(output, followers) {
         if(output) {
+            var followerArray = new Array();
             for (var key in followers) {
                 var follower = followers[key];
-                yourFollowers[follower.userid] = follower.twitter_screen_name;
+                followerArray[follower.userid] = follower.twitter_screen_name;
             }
+            callback(followerArray);
         }
-         else {   
+         else {
+            callback(false);   
         }
     });
 },

@@ -16,12 +16,12 @@ var listContent = function (tabName, tabContent) {
 
 		chrome.extension.getBackgroundPage().isFollower(field.user_id, function (followers) {
 			if(followers) {
-				console.log("happalappa");
-				var addUser = $("<span></span>");
-				addUser.addclass("ui-icon ui-icon-circle-plus");
-				shareUser.append(addUser);
 			} else {
-				console.log("happalappalonalaisabalaisersassss");
+				var addUser = $("<button></button>");
+				addUser.addClass("addUserButton");
+				addUser.append("Follow<input class='user_id' type='hidden' value='" + field.user_id + "' />");
+				addUser.button();
+				shareContainer.append(addUser);						
 			}
 		}); 		
 		
@@ -172,6 +172,26 @@ startListeners = function () {
 	  			success: function(data) {
 			  		console.log(data);
 			    	$("#shareButtonContent").html("<div>" + data.new_status + "</div>");
+  				},
+  				error: function (xhr, ajaxOptions, thrownError){
+  					console.log(thrownError);
+  				}
+			});
+		});	
+	}).on("click", ".addUserButton", function () {
+		self = $(this);
+		var user_id = self.children("span").children(".user_id").val();
+		console.log(user_id);
+		self.children("span").html("<img src='../img/loading.gif' />");
+		chrome.tabs.getSelected(null, function(tab) {
+			$.ajax({
+				type: "GET",	
+	  			url: 'http://www.retrojorgen.com/api.php',
+	  			data: {type: 'addfollower', id: user_id},
+	  			success: function(data) {
+			  		console.log("added");
+			    	self.children("span").html("Unfollow" + "<input class='share_id' type='hidden' value='" + user_id + "' />");
+			    	self.removeClass("addUserButton").addClass("removeUserButton");
   				},
   				error: function (xhr, ajaxOptions, thrownError){
   					console.log(thrownError);
