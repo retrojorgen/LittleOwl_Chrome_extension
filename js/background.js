@@ -2,18 +2,60 @@ var iconstatus = false,
 yourShare = false,
 allShare = false, 
 latestValue = 0,
+userCredentials = false,
+yourFollowers = new Array(),
 shareInterval = function () {
     setInterval(function() { 
-        setYourShareLogFromXMLHttpRequest(function(output) {
-            if(latestValue === 0) {
-                    latestValue = yourShare[0].id;
+        getYourShareLogFromXMLHttpRequest(function(output, shares) {
+            if(output) {
+                yourShare = shares;
+                if(latestValue === 0) {
+                        latestValue = yourShare[0].id;
+                }
+                getAllShareLogFromXMLHttpRequest(function(output, shares) {
+                    if(output) {
+                        allShare = shares;
+                        setUserCredentials(function(output, credentials) {
+                            if(output) {
+                                userCredentials = credentials;
+                                setFollowers(function(followerArray) {
+                                    if(followerArray) {
+                                        yourFollowers = followerArray;
+                                        yourFollowers[userCredentials.user_id] = userCredentials.user_id;
+                                        chrome.browserAction.setIcon({path: '../img/icon_online.png'});                                    
+                                    } else {
+                                        console.log("Service not available");
+                                    }
+                                });
+                            } 
+                        });                        
+                        updateBadgeStatus();                        
+                    }
+                });
             }
-            setAllShareLogFromXMLHttpRequest(function(output) {
-                chrome.browserAction.setIcon({path: '../img/icon_online.png'});
-                updateBadgeStatus();
-            });
         });
     }, 5000);
+},
+setFollowers = function(callback) {
+    getFollowersFromXMLHttpRequest(function(output, followers) {
+        if(output) {
+            for (var key in followers) {
+                var follower = followers[key];
+                yourFollowers[follower.userid] = follower.twitter_screen_name;
+            }
+        }
+         else {   
+        }
+    });
+},
+isFollower = function (follower, callback) {
+    console.log(yourFollowers);
+    if(yourFollowers[follower]) {
+        callback(true);
+    } else {
+        callback(false);
+    }
+    
 },
 doXMLhttpRequest = function (type,url,callback) {
    var req = new XMLHttpRequest();
@@ -36,19 +78,44 @@ getLatestValue = function() {
 setLatestValueFromPopup = function () {
     latestValue = yourShare[0].id;
 },
-setYourShareLogFromXMLHttpRequest = function (callback) {
+getYourShareLogFromXMLHttpRequest = function (callback) {
     doXMLhttpRequest("GET","http://www.retrojorgen.com/api.php?type=showshare", function(output) {
-        if(output) {
-            yourShare = JSON.parse(output);
-            callback(true);
-        }    
-            
+        if(output) {          
+            callback(true, JSON.parse(output));
+        }
+        else {
+            callback(false, false);
+        }      
     });
 },
-setAllShareLogFromXMLHttpRequest = function (callback) {
+getAllShareLogFromXMLHttpRequest = function (callback) {
     doXMLhttpRequest("GET","http://www.retrojorgen.com/api.php?type=showshare&status=all", function(output) {
-        allShare = JSON.parse(output);
-        callback();    
+        if(output) {
+            callback(true, JSON.parse(output));
+        }
+        else {
+            callback(false, false);
+        }
+    });
+},
+getFollowersFromXMLHttpRequest = function (callback) {
+    doXMLhttpRequest("GET","http://www.retrojorgen.com/api.php?type=showfollowers", function(output) {
+        if(output) {
+            callback(true, JSON.parse(output));
+        }
+        else {
+            callback(false);
+        }    
+    });
+},
+setUserCredentials = function (callback) {
+    doXMLhttpRequest("GET","http://www.retrojorgen.com/api.php?type=getusercredentials", function(output) {
+        if(output) {
+            callback(true, JSON.parse(output));
+        }
+        else {
+            callback(false);
+        }    
     });
 },
 updateBadgeStatus = function () {

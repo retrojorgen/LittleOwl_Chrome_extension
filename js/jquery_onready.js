@@ -1,36 +1,72 @@
 var listContent = function (tabName, tabContent) {
-		var itemcontent = $(tabName);
-		chrome.extension.getBackgroundPage().setLatestValueFromPopup();
-		itemcontent.children('.share').remove(); //remove all shares
-		$.each(tabContent, function(i, field){
-			itemcontent.append(
-				"<div class='share'>" +
-					"<span class='user'>@" +
-						field.twitter_screen_name + 
-					"</span>" +
-					"<span class='date'>" +
-						compareDateToNow(dateFromMySQLTimestamp(field.timestamp)) +
-					"</span>" +
-					"<div class='message'>" +
-						field.message + 
-					"</div>" +				
-					"<div class='sharedcontent'>" + 
-						"<img src='http://www.google.com/s2/favicons?domain=" + 
-						field.host + 
-						"'/>" + 
-						"<div class='url'>" +
-							field.title + 
-							" - " + 
-							field.host +
-						"</div>" + 	
-						"<input type='hidden' class='openUrl' value='" + 
-						field.url +
-						"'/>" +	
-					"</div>" +
-				"</div>"
-			);
-		});
+	var itemcontent = $(tabName);
+	chrome.extension.getBackgroundPage().setLatestValueFromPopup();
+	itemcontent.children('.share').remove(); //remove all shares
+	$.each(tabContent, function(i, field){
+		
+		var shareContainer = $("<div></div>");
+		shareContainer.addClass("share");
+		itemcontent.append(shareContainer);
+		
 
+		var shareUser = $("<span></span>");
+		shareUser.addClass("user");
+		shareUser.append("@" + field.twitter_screen_name);
+		shareContainer.append(shareUser);
+
+		chrome.extension.getBackgroundPage().isFollower(field.user_id, function (followers) {
+			if(followers) {
+				console.log("happalappa");
+				var addUser = $("<span></span>");
+				addUser.addclass("ui-icon ui-icon-circle-plus");
+				shareUser.append(addUser);
+			} else {
+				console.log("happalappalonalaisabalaisersassss");
+			}
+		}); 		
+		
+		var shareDate = $("<span></span>");
+		shareDate.addClass("date");
+		shareDate.append(compareDateToNow(dateFromMySQLTimestamp(field.timestamp)));
+		shareContainer.append(shareDate);
+
+		var shareMessage = $("<div></div>");
+		shareMessage.addClass("message");
+		shareMessage.append(field.message);
+		shareContainer.append(shareMessage);
+		
+
+
+		var shareButtonsContainer = $("<span></span>");
+		shareButtonsContainer.addClass("shareButtonsContainer");
+		shareContainer.append(shareButtonsContainer);
+
+		if(field.user_id === chrome.extension.getBackgroundPage().userCredentials.user_id) {
+
+			var shareDeleteButton = $("<button></button>");
+			shareDeleteButton.addClass("shareDeleteButton");
+			shareDeleteButton.append("<span class='ui-icon ui-icon-closethick'></span>" + "<input class='share_id' type='hidden' value='" + field.id + "' />");
+			shareButtonsContainer.append(shareDeleteButton);
+		}
+
+		var shareContent = $("<div></div>");
+		shareContent.addClass("sharedcontent");
+		shareContent.append("<img src='http://www.google.com/s2/favicons?domain=" + field.host + "'/>");
+		shareContainer.append(shareContent);
+
+		var shareUrl = $("<div></div>");
+		shareUrl.addClass("url");
+		shareUrl.append(field.title + " - " + field.host);
+		shareContent.append(shareUrl);				
+
+		var shareHiddenUrl = $("<input type='hidden' />");
+		shareHiddenUrl.addClass("openUrl");
+		shareHiddenUrl.val(field.url);
+		shareContent.append(shareHiddenUrl);
+
+		
+
+	});	
 },
 dateFromMySQLTimestamp = function (mySQLTimestampString) {
 	mySQLTimestampString = mySQLTimestampString.split(/[- :]/);
@@ -107,10 +143,27 @@ startListeners = function () {
 	}).on("click", ".sharedcontent", function() {
 		var url = $(this).children(".openUrl").val();
 		chrome.tabs.create({url: url, active : false});	
+	}).on("click", ".shareDeleteButton", function () {
+		var current = $(this);
+		var share_id = current.children(".share_id").val();
+		current.html("<img src='../img/loading.gif' />");
+		$.ajax({
+			type: "GET",	
+	  		url: 'http://www.retrojorgen.com/api.php',
+	  		data: {type: "deleteusershare", id: share_id},
+	  		dataType: "json",
+	  		success: function(data) {
+				current.parent().parent().remove();
+	  		},
+	  		error: function (xhr, ajaxOptions, thrownError){
+	  			console.log(thrownError);
+	  		}
+		});			
+
 	}).on("click", ".splashContent", function () {
 		chrome.tabs.create({url: 'http://www.retrojorgen.com/api.php?type=authenticationredirect'});
 	}).on("click", "#sharebutton", function () {
-		$("#shareButtonContent").html("<img src='../img/loading.gif' />");
+		$(this).html("<img src='../img/loading.gif' />");
 		chrome.tabs.getSelected(null, function(tab) {
 			$.ajax({
 				type: "POST",	
@@ -125,7 +178,7 @@ startListeners = function () {
   				}
 			});
 		});	
-	}).on("click", "followButton", function () {
+	}).on("click", ".followButton", function () {
 		var current = $(this);
 		var followerid = current.parent().children(".followerid").val();
 		var followerstring = current.val();
