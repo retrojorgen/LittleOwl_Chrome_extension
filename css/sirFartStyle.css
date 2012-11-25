@@ -158,3 +158,64 @@ div.url:hover {
   padding: 2px;
   margin: 0px;   
 }
+.followButton.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only {
+  -khtml-border-bottom-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  -khtml-border-bottom-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding: 2px;
+  margin: 0px;   
+}
+#shareButton {
+  margin-left: 125px;
+  -khtml-border-top-right-radius: 6px;
+  border-top-right-radius: 6px;
+  -khtml-border-top-left-radius: 6px;
+  border-top-left-radius: 6px;
+    -khtml-border-bottom-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  -khtml-border-bottom-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding: 6px;
+}
+.followButton {
+  float: right;
+}
+.shareTab {
+padding: 10px;
+height: 400px;
+text-align: center;
+min-height: 320px;
+}
+.shareTab ul {
+  list-style-type: none;
+  padding: 8px;
+  margin: 6px;
+  width: 90%;
+  word-wrap: break-word;
+  box-shadow: 1px 2px 10px #888;
+  border: 2px solid;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  background-color: #3396C5;
+  color: white;
+  text-align: left;
+}
+.shareTab h2 {
+  margin: 0px;
+  padding: 0px;
+  color: #1B6B91;
+  font-size: 1.6em;
+  font-weight: bold;
+}
+.shareTab h3 {
+  padding: 0px;
+  margin: 0px;
+  color: #3396C5;
+}
+.shareTab ul li {
+  margin-bottom: 6px;
+}
+#sharetext {
+width: 300px;
+}

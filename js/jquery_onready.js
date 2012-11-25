@@ -8,35 +8,27 @@ var listContent = function (tabName, tabContent) {
 		shareContainer.addClass("share");
 		itemcontent.append(shareContainer);
 		
-
 		var shareUser = $("<span></span>");
-		shareUser.addClass("user");
-		shareUser.append("@" + field.twitter_screen_name);
+		shareUser.addClass("user").append("@" + field.twitter_screen_name);
 		shareContainer.append(shareUser);
 
 		chrome.extension.getBackgroundPage().isFollower(field.user_id, function (followers) {
 			if(followers) {
 			} else {
 				var addUser = $("<button></button>");
-				addUser.addClass("addUserButton");
-				addUser.append("Follow<input class='user_id' type='hidden' value='" + field.user_id + "' />");
-				addUser.button();
+				addUser.addClass("addUserButton").append("Follow<input class='user_id' type='hidden' value='" + field.user_id + "' />").button();
 				shareContainer.append(addUser);						
 			}
 		}); 		
 		
 		var shareDate = $("<span></span>");
-		shareDate.addClass("date");
-		shareDate.append(compareDateToNow(dateFromMySQLTimestamp(field.timestamp)));
+		shareDate.addClass("date").append(compareDateToNow(dateFromMySQLTimestamp(field.timestamp)));
 		shareContainer.append(shareDate);
 
 		var shareMessage = $("<div></div>");
-		shareMessage.addClass("message");
-		shareMessage.append(field.message);
+		shareMessage.addClass("message").append(field.message);
 		shareContainer.append(shareMessage);
 		
-
-
 		var shareButtonsContainer = $("<span></span>");
 		shareButtonsContainer.addClass("shareButtonsContainer");
 		shareContainer.append(shareButtonsContainer);
@@ -44,24 +36,20 @@ var listContent = function (tabName, tabContent) {
 		if(field.user_id === chrome.extension.getBackgroundPage().userCredentials.user_id) {
 
 			var shareDeleteButton = $("<button></button>");
-			shareDeleteButton.addClass("shareDeleteButton");
-			shareDeleteButton.append("<span class='ui-icon ui-icon-closethick'></span>" + "<input class='share_id' type='hidden' value='" + field.id + "' />");
+			shareDeleteButton.addClass("shareDeleteButton").append("<span class='ui-icon ui-icon-closethick'></span>" + "<input class='share_id' type='hidden' value='" + field.id + "' />");
 			shareButtonsContainer.append(shareDeleteButton);
 		}
 
 		var shareContent = $("<div></div>");
-		shareContent.addClass("sharedcontent");
-		shareContent.append("<img src='http://www.google.com/s2/favicons?domain=" + field.host + "'/>");
+		shareContent.addClass("sharedcontent").append("<img src='http://www.google.com/s2/favicons?domain=" + field.host + "'/>");
 		shareContainer.append(shareContent);
 
 		var shareUrl = $("<div></div>");
-		shareUrl.addClass("url");
-		shareUrl.append(field.title + " - " + field.host);
+		shareUrl.addClass("url").append(field.title + " - " + field.host);
 		shareContent.append(shareUrl);				
 
 		var shareHiddenUrl = $("<input type='hidden' />");
-		shareHiddenUrl.addClass("openUrl");
-		shareHiddenUrl.val(field.url);
+		shareHiddenUrl.addClass("openUrl").val(field.url);
 		shareContent.append(shareHiddenUrl);
 
 		
@@ -110,7 +98,9 @@ tabs2 = function() {
 	var getFollowers = $.getJSON('http://www.retrojorgen.com/api.php?type=showfollowers', function(data) {
 		tab2Content.empty();
      	$.each(data, function(i, field){
-        		tab2Content.append("<div class='follower'>@" + field.twitter_screen_name + "<input type='hidden' class='followerid' name='id' value='" + field.user_id +"'><input type='button' class='followButton' value='unFollow'></div>");
+   	  		var followerContent = $("<div class='follower'>@" + field.twitter_screen_name + "<input type='hidden' class='followerid' name='id' value='" + field.user_id +"'><button class='followButton'>unfollow</button></div>");
+			followerContent.children("button").button();
+        		tab2Content.append(followerContent);
         });
 	}).error(function() {
 		//tab2Content.children("#tabs-2Content").("<div class='error'>You are not following anyone</div>");
@@ -120,14 +110,17 @@ tabs3 = function() {
 	var tab3Content = $("#tabs-3");
 	tab3Content.html("<img src='../img/loading.gif' />");
 	chrome.tabs.getSelected(null, function(tab) {
-		tab3Content.html("<div class='share'>" + 
-		"Share this url?<br/>" + 
+		var shareContent = $(
+		"<div>" +
+		"<h2>SirFart lets you share</h2><h3>the website your are currently browsing, and add a message. Simple.</h3>" +
 		"<ul><li>Url: " + tab.url + "</li><li>Title: " + tab.title + "</li></ul>" +
-		"<span>Max 60 characters</span><br />" +
-		"<textarea id='sharetext' cols='30' rows='2'></textarea>" +
+		"<h3>Add a message</h3><textarea id='sharetext' cols='30' rows='2'></textarea>" +
 		"<span id='sharetextcounter'>60</span> characters left" +
-		"<div id='shareButtonContent'><button id='sharebutton'>Share</button></div>" +
 		"</div>");
+		var shareButton = $("<button id='shareButton'>Share</button>");
+		shareButton.button();
+		shareContent.addClass("shareTab").append(shareButton);
+		tab3Content.html(shareContent);
 	});		
 },
 startListeners = function () {
@@ -135,10 +128,10 @@ startListeners = function () {
 		var count = $("#sharetext").val().length;
 		$("#sharetextcounter").empty().html(60 - count);		
 		if((60 - count) < 0){
-			$('#shareButtonContent').html("Too many characters");	
+			$('#shareButton').html("Too many characters").button({ disabled: true });
 		}
 		else {
-			$('#shareButtonContent').html("<button id='sharebutton'>Share</button>");
+			$('#shareButton').html("Share").button({disabled: false});
 		}
 	}).on("click", ".sharedcontent", function() {
 		var url = $(this).children(".openUrl").val();
@@ -158,11 +151,10 @@ startListeners = function () {
 	  		error: function (xhr, ajaxOptions, thrownError){
 	  			console.log(thrownError);
 	  		}
-		});			
-
+		});
 	}).on("click", ".splashContent", function () {
 		chrome.tabs.create({url: 'http://www.retrojorgen.com/api.php?type=authenticationredirect'});
-	}).on("click", "#sharebutton", function () {
+	}).on("click", "#shareButton", function () {
 		$(this).html("<img src='../img/loading.gif' />");
 		chrome.tabs.getSelected(null, function(tab) {
 			$.ajax({
@@ -171,7 +163,7 @@ startListeners = function () {
 	  			data: {url: tab.url, title: tab.title, message: $("#sharetext").val()},
 	  			success: function(data) {
 			  		console.log(data);
-			    	$("#shareButtonContent").html("<div>" + data.new_status + "</div>");
+			    	$("#shareButton").html(data.new_status).button({ disabled: true });
   				},
   				error: function (xhr, ajaxOptions, thrownError){
   					console.log(thrownError);
