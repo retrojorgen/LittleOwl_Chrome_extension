@@ -43,7 +43,7 @@ div.message {
 div.url {
 }
 .follower {
-  padding: 10px;
+  padding: 15px;
   border-bottom: 1px solid #a1afbf;
 }
 .follow {
@@ -164,6 +164,15 @@ div.url:hover {
   -khtml-border-bottom-right-radius: 6px;
   border-bottom-right-radius: 6px;
   padding: 2px;
+  margin: 0px;
+  margin-bottom: 4px;   
+}
+.shareDeleteButton.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only {
+  -khtml-border-bottom-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  -khtml-border-bottom-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding: 2px;
   margin: 0px;   
 }
 #shareButton {
@@ -183,9 +192,8 @@ div.url:hover {
 }
 .shareTab {
 padding: 10px;
-height: 400px;
 text-align: center;
-min-height: 320px;
+min-height: 300px;
 }
 .shareTab ul {
   list-style-type: none;

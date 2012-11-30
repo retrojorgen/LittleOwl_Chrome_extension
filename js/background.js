@@ -18,29 +18,27 @@ shareInterval = function () {
                         setUserCredentials(function(output, credentials) {
                             if(output) {
                                 userCredentials = credentials;
+                                yourFollowers = new Array();
+                                yourFollowers[userCredentials.user_id] = userCredentials.user_id;
                                 getFollowers(function(followerArray) {
                                     if(followerArray) {
                                         yourFollowers = followerArray;
                                         yourFollowers[userCredentials.user_id] = userCredentials.user_id;
-                                        chrome.browserAction.setIcon({path: '../img/icon_online.png'});                                    
                                     } else {
-                                        console.log("Service not available");
                                     }
+                                    chrome.browserAction.setIcon({path: '../img/icon_online.png'});
                                 });
                             } else {
-                                console.log("failed to get user credentials");
                             } 
                         });                        
                         updateBadgeStatus();                        
                     } else {
-                        console.log("failed to get all share");
                     }
                 });
             } else {
-                console.log("failed to get your share");
             }
         });
-    }, 5000);
+    }, 10000);
 },
 getFollowers = function(callback) {
     getFollowersFromXMLHttpRequest(function(output, followers) {
@@ -58,7 +56,6 @@ getFollowers = function(callback) {
     });
 },
 isFollower = function (follower, callback) {
-    console.log(yourFollowers);
     if(yourFollowers[follower]) {
         callback(true);
     } else {
