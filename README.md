@@ -1,7 +1,7 @@
-SirFart_Chrome_extension
+LittleOwl_Chrome_extension
 ========================
 
-SirFart is a tiny social network for sharing urls, that is run
+LittleOwl is a tiny social network for sharing urls, that is run
 as a Chrome extension.
 
 It uses Twitter as authentication.
